@@ -1,0 +1,338 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CampRent - Sewa alat camping berkualitas dengan harga terjangkau. Tenda, carrier, sleeping bag, dan perlengkapan outdoor lainnya.">
+    <title>{% block title %}CampRent{% endblock %} | Sewa Alat Camping</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        dark: {
+                            800: '#1a1a2e',
+                            900: '#0f0f1a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        * { font-family: 'Inter', system-ui, sans-serif; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a2e; }
+        ::-webkit-scrollbar-thumb { background: #059669; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+        
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-light {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981, #34d399, #6ee7b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Card hover */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.15);
+        }
+        
+        /* Pulse glow */
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.6); }
+        }
+        
+        /* Float animation */
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Fade in up */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Stagger animations */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+        .stagger-6 { animation-delay: 0.6s; }
+        
+        /* Gradient border */
+        .gradient-border {
+            position: relative;
+        }
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, #10b981, #059669, #047857);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        
+        /* Status badges */
+        .badge-pending { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .badge-dipinjam { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .badge-selesai { background: linear-gradient(135deg, #10b981, #059669); }
+        
+        /* Nav active */
+        .nav-active {
+            color: #10b981;
+            border-bottom: 2px solid #10b981;
+        }
+        
+        /* Image overlay */
+        .img-overlay {
+            position: relative;
+            overflow: hidden;
+        }
+        .img-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+        }
+        .img-overlay img {
+            transition: transform 0.6s ease;
+        }
+        .img-overlay:hover img {
+            transform: scale(1.1);
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-950 text-white min-h-screen">
+    
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-20">
+                <!-- Logo -->
+                <a href="{% url 'rental:landing' %}" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/25 group-hover:shadow-emerald-500/50 transition-all duration-300">
+                        <i data-lucide="tent" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">CampRent</span>
+                </a>
+                
+                <!-- Desktop Nav Links -->
+                <div class="hidden md:flex items-center gap-1">
+                    <a href="{% url 'rental:landing' %}" class="px-4 py-2 rounded-lg text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all duration-300 text-sm font-medium">Beranda</a>
+                    <a href="{% url 'rental:catalog' %}" class="px-4 py-2 rounded-lg text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all duration-300 text-sm font-medium">Katalog</a>
+                    <a href="{% url 'rental:booking' %}" class="px-4 py-2 rounded-lg text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all duration-300 text-sm font-medium">Booking</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'rental:dashboard' %}" class="ml-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/50 transition-all duration-300">Dashboard</a>
+                    {% else %}
+                    <a href="{% url 'rental:admin_login' %}" class="ml-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/50 transition-all duration-300">Admin</a>
+                    {% endif %}
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-white/5">
+            <div class="px-4 py-4 space-y-2">
+                <a href="{% url 'rental:landing' %}" class="block px-4 py-3 rounded-xl text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all text-sm font-medium">Beranda</a>
+                <a href="{% url 'rental:catalog' %}" class="block px-4 py-3 rounded-xl text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all text-sm font-medium">Katalog</a>
+                <a href="{% url 'rental:booking' %}" class="block px-4 py-3 rounded-xl text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all text-sm font-medium">Booking</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'rental:dashboard' %}" class="block px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold text-center">Dashboard</a>
+                {% else %}
+                <a href="{% url 'rental:admin_login' %}" class="block px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold text-center">Admin</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Messages -->
+    {% if messages %}
+    <div class="fixed top-24 right-4 z-50 space-y-2" id="messages-container">
+        {% for message in messages %}
+        <div class="message-toast px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 fade-in-up max-w-sm
+            {% if message.tags == 'success' %}bg-gradient-to-r from-emerald-600 to-emerald-700 text-white
+            {% elif message.tags == 'error' %}bg-gradient-to-r from-red-600 to-red-700 text-white
+            {% elif message.tags == 'warning' %}bg-gradient-to-r from-amber-600 to-amber-700 text-white
+            {% else %}bg-gradient-to-r from-blue-600 to-blue-700 text-white{% endif %}">
+            {% if message.tags == 'success' %}<i data-lucide="check-circle" class="w-5 h-5 flex-shrink-0"></i>
+            {% elif message.tags == 'error' %}<i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0"></i>
+            {% else %}<i data-lucide="info" class="w-5 h-5 flex-shrink-0"></i>{% endif %}
+            <span class="text-sm font-medium">{{ message }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    {% block footer %}
+    <footer class="bg-gray-900/50 border-t border-white/5 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Brand -->
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
+                            <i data-lucide="tent" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">CampRent</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">Penyewaan alat camping berkualitas dengan harga terjangkau. Nikmati petualangan outdoor tanpa ribet!</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="font-semibold text-white mb-4">Menu</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'rental:landing' %}" class="text-gray-400 hover:text-emerald-400 transition text-sm">Beranda</a></li>
+                        <li><a href="{% url 'rental:catalog' %}" class="text-gray-400 hover:text-emerald-400 transition text-sm">Katalog Alat</a></li>
+                        <li><a href="{% url 'rental:booking' %}" class="text-gray-400 hover:text-emerald-400 transition text-sm">Booking</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="font-semibold text-white mb-4">Kontak</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-2 text-gray-400 text-sm">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-emerald-500"></i>
+                            Banda Aceh, Indonesia
+                        </li>
+                        <li class="flex items-center gap-2 text-gray-400 text-sm">
+                            <i data-lucide="phone" class="w-4 h-4 text-emerald-500"></i>
+                            +62 812-3456-7890
+                        </li>
+                        <li class="flex items-center gap-2 text-gray-400 text-sm">
+                            <i data-lucide="mail" class="w-4 h-4 text-emerald-500"></i>
+                            info@camprent.id
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 mt-8 pt-8 text-center">
+                <p class="text-gray-500 text-sm">&copy; 2026 CampRent. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+        
+        // Auto-dismiss messages
+        setTimeout(() => {
+            const container = document.getElementById('messages-container');
+            if (container) {
+                container.style.transition = 'opacity 0.5s ease';
+                container.style.opacity = '0';
+                setTimeout(() => container.remove(), 500);
+            }
+        }, 4000);
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(15, 15, 26, 0.95)';
+                navbar.style.borderBottom = '1px solid rgba(16, 185, 129, 0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.05)';
+                navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

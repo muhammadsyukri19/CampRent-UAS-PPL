@@ -1,0 +1,102 @@
+{% extends 'rental/admin/base_admin.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_subtitle %}{% if equipment %}Edit data alat "{{ equipment.name }}"{% else %}Tambah data alat camping baru{% endif %}{% endblock %}
+
+{% block admin_content %}
+<div class="max-w-2xl">
+    <!-- Back Button -->
+    <a href="{% url 'rental:equipment_list' %}" class="inline-flex items-center gap-2 text-gray-400 hover:text-emerald-400 transition text-sm mb-6">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        Kembali ke daftar alat
+    </a>
+    
+    <!-- Form -->
+    <div class="rounded-2xl bg-gray-900/50 border border-white/5 p-6 sm:p-8">
+        {% if form.errors %}
+        <div class="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400">
+            <div class="flex items-center gap-2 mb-2">
+                <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                <span class="font-semibold text-sm">Terdapat kesalahan:</span>
+            </div>
+            <ul class="list-disc list-inside text-sm space-y-1">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            
+            <div>
+                <label for="id_name" class="block text-sm font-semibold text-gray-300 mb-2">
+                    <i data-lucide="type" class="w-4 h-4 inline mr-1 text-emerald-500"></i>
+                    Nama Alat <span class="text-red-400">*</span>
+                </label>
+                {{ form.name }}
+            </div>
+            
+            <div>
+                <label for="id_category" class="block text-sm font-semibold text-gray-300 mb-2">
+                    <i data-lucide="tag" class="w-4 h-4 inline mr-1 text-emerald-500"></i>
+                    Kategori <span class="text-red-400">*</span>
+                </label>
+                {{ form.category }}
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="id_price_per_day" class="block text-sm font-semibold text-gray-300 mb-2">
+                        <i data-lucide="wallet" class="w-4 h-4 inline mr-1 text-emerald-500"></i>
+                        Harga/Hari (Rp) <span class="text-red-400">*</span>
+                    </label>
+                    {{ form.price_per_day }}
+                </div>
+                <div>
+                    <label for="id_stock" class="block text-sm font-semibold text-gray-300 mb-2">
+                        <i data-lucide="boxes" class="w-4 h-4 inline mr-1 text-emerald-500"></i>
+                        Stok <span class="text-red-400">*</span>
+                    </label>
+                    {{ form.stock }}
+                </div>
+            </div>
+            
+            <div>
+                <label for="id_description" class="block text-sm font-semibold text-gray-300 mb-2">
+                    <i data-lucide="file-text" class="w-4 h-4 inline mr-1 text-emerald-500"></i>
+                    Deskripsi
+                </label>
+                {{ form.description }}
+            </div>
+            
+            <div>
+                <label for="id_image" class="block text-sm font-semibold text-gray-300 mb-2">
+                    <i data-lucide="image" class="w-4 h-4 inline mr-1 text-emerald-500"></i>
+                    Gambar
+                </label>
+                {% if equipment and equipment.image %}
+                <div class="mb-3">
+                    <img src="{{ equipment.image.url }}" alt="{{ equipment.name }}" class="w-32 h-32 object-cover rounded-xl border border-white/10">
+                </div>
+                {% endif %}
+                {{ form.image }}
+            </div>
+            
+            <div class="flex gap-3 pt-4">
+                <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/50 hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    Simpan
+                </button>
+                <a href="{% url 'rental:equipment_list' %}" class="px-6 py-3 rounded-xl bg-gray-700/50 text-gray-300 font-medium hover:bg-gray-700 transition text-center">
+                    Batal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

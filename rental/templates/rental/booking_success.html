@@ -1,0 +1,39 @@
+{% extends 'rental/base.html' %}
+{% load static %}
+
+{% block title %}Booking Berhasil{% endblock %}
+
+{% block content %}
+<section class="pt-28 pb-24 min-h-screen flex items-center justify-center">
+    <div class="max-w-lg mx-auto px-4 text-center fade-in-up">
+        <!-- Success Icon -->
+        <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mb-8 shadow-2xl shadow-emerald-500/30 pulse-glow">
+            <i data-lucide="check" class="w-12 h-12 text-white"></i>
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl font-bold mb-4">Booking <span class="gradient-text">Berhasil!</span></h1>
+        <p class="text-gray-300 text-lg mb-8 leading-relaxed">
+            Terima kasih! Data booking Anda telah tersimpan. Kami akan segera memproses pesanan Anda.
+        </p>
+        
+        <div class="glass rounded-2xl p-6 mb-8">
+            <div class="flex items-center gap-3 text-emerald-400 mb-3">
+                <i data-lucide="info" class="w-5 h-5"></i>
+                <span class="font-semibold">Informasi</span>
+            </div>
+            <p class="text-gray-400 text-sm">Silakan hubungi kami melalui nomor telepon yang tersedia untuk konfirmasi lebih lanjut mengenai pengambilan alat.</p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'rental:catalog' %}" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-medium hover:bg-emerald-500 hover:text-white transition-all duration-300">
+                <i data-lucide="compass" class="w-5 h-5"></i>
+                Lihat Katalog
+            </a>
+            <a href="{% url 'rental:landing' %}" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                Kembali ke Beranda
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

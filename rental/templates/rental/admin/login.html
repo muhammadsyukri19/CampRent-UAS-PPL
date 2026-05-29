@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin | CampRent</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        * { font-family: 'Inter', system-ui, sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-white min-h-screen flex items-center justify-center relative overflow-hidden">
+    <!-- Background decorations -->
+    <div class="absolute top-20 left-20 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl float"></div>
+    <div class="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl float" style="animation-delay: 3s;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl"></div>
+    
+    <div class="w-full max-w-md mx-auto px-4 relative z-10">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <a href="{% url 'rental:landing' %}" class="inline-flex items-center gap-3 mb-6">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-2xl shadow-emerald-500/30">
+                    <i data-lucide="tent" class="w-7 h-7 text-white"></i>
+                </div>
+                <span class="text-3xl font-bold gradient-text">CampRent</span>
+            </a>
+            <h1 class="text-2xl font-bold">Login Admin</h1>
+            <p class="text-gray-400 mt-2">Masuk ke dashboard untuk mengelola data</p>
+        </div>
+        
+        <!-- Login Form -->
+        <div class="glass rounded-3xl p-8">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="mb-6 px-4 py-3 rounded-xl {% if message.tags == 'error' %}bg-red-500/10 border border-red-500/20 text-red-400{% else %}bg-emerald-500/10 border border-emerald-500/20 text-emerald-400{% endif %} flex items-center gap-2">
+                <i data-lucide="{% if message.tags == 'error' %}alert-circle{% else %}check-circle{% endif %}" class="w-5 h-5 flex-shrink-0"></i>
+                <span class="text-sm">{{ message }}</span>
+            </div>
+            {% endfor %}
+            {% endif %}
+            
+            <form method="POST" class="space-y-5">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="id_username" class="block text-sm font-semibold text-gray-300 mb-2">
+                        <i data-lucide="user" class="w-4 h-4 inline mr-1 text-emerald-500"></i>
+                        Username
+                    </label>
+                    {{ form.username }}
+                </div>
+                
+                <div>
+                    <label for="id_password" class="block text-sm font-semibold text-gray-300 mb-2">
+                        <i data-lucide="lock" class="w-4 h-4 inline mr-1 text-emerald-500"></i>
+                        Password
+                    </label>
+                    {{ form.password }}
+                </div>
+                
+                <button type="submit" class="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-lg shadow-2xl shadow-emerald-500/25 hover:shadow-emerald-500/50 hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-[1.02]">
+                    <i data-lucide="log-in" class="w-5 h-5"></i>
+                    Login
+                </button>
+            </form>
+        </div>
+        
+        <div class="text-center mt-6">
+            <a href="{% url 'rental:landing' %}" class="text-gray-400 hover:text-emerald-400 transition text-sm inline-flex items-center gap-1">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                Kembali ke Beranda
+            </a>
+        </div>
+    </div>
+    
+    <script>lucide.createIcons();</script>
+</body>
+</html>
